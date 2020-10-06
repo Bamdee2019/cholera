@@ -11,42 +11,42 @@
 			stroke-width: 1px;
 			fill: none;
 		}
-		
+
 		svg .mapLabel {
 			font-family: sans-serif;
 			fill: gray;
 		}
-		
+
 		svg .pump {
 			fill: black;
 			stroke: none;
 		}
-		
+
 		svg .death {
 			stroke: none;
 			r: 2;
 		}
-		
+
 		svg .graphline {
 			fill: none;
 			stroke-width: 1px;
 		}
-		
+
 		svg .deathhoverbar:hover {
 			fill-opacity: .1;
 		}
-		
+
 		svg .graphbutton {
 			rx: 5;
 			ry: 5;
 			stroke: none;
 		}
-		
+
 		svg .graphbuttonlabel {
 			font-family: 'Arial';
 			font-size: 15px;
 		}
-		
+
 		.axis path,
 		.axis line {
 			fill: none;
@@ -59,7 +59,7 @@
 			font-size: 10px;
 			fill: gray;
 		}
-		
+
 	</style>
 </head>
 <body>
@@ -74,7 +74,9 @@
 		<br/><br/>
 		<div class="pagetext">
 			<p>
-			In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician John Snow theorized that the disease was related to contaminated water. He created a map that showed where the deaths occurred in relation to water pumps in the area (the black diamonds), and showed they were strongly correlated with a water pump on Broad Street. This data visualization is inspired by his work. <a href="https://youtu.be/_QCHMj1vbjE">Click here to see a video demonstration of the visualization.</a>
+			John Snow's heroic attempt at detecting the cause of cholera eoidermic that broke out in London and killed people in their hundreds. He successfully used map plot to carve out the worst hit to mildly hit areas.
+		.He created a map that showed where the deaths occurred in relation to water pumps in the area (the black diamonds), and showed they were strongly correlated with a water pump on Broad Street.
+		 </a>
 			</p>
 		</div>
 		<svg id="map" width="49%" viewBox="0 0 500 500">
@@ -84,33 +86,33 @@
 		</svg>
 	</div>
 
-	
+
 	<script type="text/javascript">
 		const SIZE = 500;
 		let padding = 30;
-	
+
 		let map = d3.select("svg#map");
 		let mapWidth = SIZE;
 		let mapHeight = SIZE;
 		let mapXScale = d3.scale.linear();
 		let mapYScale = d3.scale.linear();
-		
+
 		let buttonHeight = 30;
 		let buttonPadding = 10;
-		
+
 		let graph = d3.select("svg#graph");
 		let graphWidth = SIZE;
-		let graphHeight = SIZE - 
+		let graphHeight = SIZE -
 			(buttonHeight + buttonPadding * 2);
 		let graphXScale = d3.scale.linear();
 		let graphYScale = d3.scale.linear();
-		
+
 		let buttonWidth = (graphWidth - 4 * buttonPadding) / 3;
 		let keyButtonWidth = buttonWidth / 2;
-	
+
 		let maleOpacity = 1;
 		let famaleOpacity = 1;
-		
+
 		let ageRanges = [
 			{
 				label: '0-10',
@@ -143,64 +145,64 @@
 				color: '#002F00'
 			}
 		];
-		
+
 		let streets = [];
 		let mapLabels = [];
 		let pumps = [];
-		
+
 		let deathDays = [];
 		let deaths = [];
 		let maxDeaths = 0;
-		
+
 		function resetElements() {
 			map.selectAll('.death')
 				.attr('fill','none')
 				.attr('fill-opacity', 1);
-				
+
 			graph.selectAll('.graphline')
 				.attr('stroke','none')
 				.attr('stroke-opacity',1);
-				
+
 			graph.selectAll('.graphkeybutton')
 				.attr('visibility','hidden')
 				.attr('fill-opacity', 1);
-				
+
 			maleOpacity = 1;
 			femaleOpacity = 1;
-			
+
 			for (let i=0; i < ageRanges.length; i++) {
 				ageRanges[i].opacity = 1;
 			}
 		}
-		
+
 		function displayTotal() {
 			resetElements();
-			
+
 			map.selectAll('.death').attr('fill','red');
-				
+
 			graph.select('#graphlinetotal')
 				.attr('stroke','red')
 				.attr('opacity','1');
 		}
-		
+
 		function displayGender() {
 			resetElements();
-			
+
 			map.selectAll('.male').attr('fill','blue');
 			map.selectAll('.female').attr('fill','magenta');
-			
+
 			graph.select('#graphlinegendermale').attr('stroke','blue');
 			graph.select('#graphlinegenderfemale').attr('stroke','magenta');
-			
+
 			graph.select('#buttongendermale').attr('visibility','visible');
 			graph.select('#buttongendermalelabel').attr('visibility','visible');
 			graph.select('#buttongenderfemale').attr('visibility','visible');
 			graph.select('#buttongenderfemalelabel').attr('visibility','visible');
 		}
-		
+
 		function displayAge() {
 			resetElements();
-			
+
 			for (let i=0; i < ageRanges.length; i++) {
 				map.selectAll('.age' + i)
 					.attr('fill', ageRanges[i].color);
@@ -212,7 +214,7 @@
 					.attr('visibility','visible');
 			}
 		}
-		
+
 		// Draw the location of each death on the map.
 		function drawDeathsMap() {
 			map.selectAll('.death')
@@ -236,7 +238,7 @@
 						"died " + d.deathdate;
 				});
 		}
-		
+
 		// Draw all the graph lines in advance.
 		function drawDeathsGraphLines() {
 			let graphTotalPathGenerator = d3.svg.line()
@@ -247,7 +249,7 @@
 				.attr('id', 'graphlinetotal')
 				.attr('class', 'graphline')
 				.attr('d', graphTotalPathGenerator(deathDays));
-				
+
 			let graphMalePathGenerator = d3.svg.line()
 				.x(function(d) { return graphXScale(d.day); })
 				.y(function(d) { return graphYScale(d.male); });
@@ -277,7 +279,7 @@
 					.attr('d', graphPathGenerator(deathDays));
 			}
 		}
-		
+
 		// Draw the overall structure of the graph.
 		function drawDeathsGraph() {
 
@@ -312,10 +314,10 @@
 				})
 				.append("title")
 				.text(function(d) {
-					return d.deathdate + ": " + d.total + 
+					return d.deathdate + ": " + d.total +
 						(d.total==1 ? " death" : " deaths");
 				});
-				
+
 			// Draw the axes.
 			let xAxis = d3.svg.axis()
 				.scale(graphXScale)
@@ -337,10 +339,10 @@
 				.attr('class', 'axis')
 				.attr('transform', 'translate(' + padding + ',0)')
 				.call(yAxis);
-				
+
 			// Draw the buttons.
 			let buttonLabelYAdjust = 5;
-			
+
 			// Total Deaths
 			graph.append('rect')
 				.attr('id', 'buttontotal')
@@ -358,12 +360,12 @@
 				.attr('class', 'graphbuttonlabel')
 				.text('Total')
 				.attr('x', buttonPadding + buttonWidth / 2)
-				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 + 
+				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 +
 					buttonLabelYAdjust)
 				.attr('text-anchor','middle')
 				.attr('fill', 'white')
 				.style('pointer-events','none');
-				
+
 			// By Gender
 			graph.append('rect')
 				.attr('id', 'buttongender')
@@ -381,12 +383,12 @@
 				.attr('class', 'graphbuttonlabel')
 				.text('By Gender')
 				.attr('x', buttonPadding * 2 + buttonWidth * 1.5)
-				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 + 
+				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 +
 					buttonLabelYAdjust)
 				.attr('text-anchor','middle')
 				.attr('fill', 'white')
 				.style('pointer-events','none');
-				
+
 			// By Age
 			graph.append('rect')
 				.attr('id', 'buttonage')
@@ -404,12 +406,12 @@
 				.attr('class', 'graphbuttonlabel')
 				.text('By Age')
 				.attr('x', buttonPadding * 3 + buttonWidth * 2.5)
-				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 + 
+				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 +
 					buttonLabelYAdjust)
 				.attr('text-anchor','middle')
 				.attr('fill', 'white')
 				.style('pointer-events','none');
-				
+
 			// By Gender: Male Key
 			graph.append('rect')
 				.attr('id', 'buttongendermale')
@@ -429,12 +431,12 @@
 				.attr('class', 'graphbuttonlabel graphkeybutton')
 				.text('Male')
 				.attr('x', graphWidth - (keyButtonWidth / 2 + buttonPadding))
-				.attr('y', buttonPadding + buttonHeight / 2 + 
+				.attr('y', buttonPadding + buttonHeight / 2 +
 					buttonLabelYAdjust)
 				.attr('text-anchor','middle')
 				.attr('fill', 'white')
 				.style('pointer-events','none');
-				
+
 			// By Gender: Female Key
 			graph.append('rect')
 				.attr('id', 'buttongenderfemale')
@@ -454,7 +456,7 @@
 				.attr('class', 'graphbuttonlabel graphkeybutton')
 				.text('Female')
 				.attr('x', graphWidth - (keyButtonWidth / 2 + buttonPadding))
-				.attr('y', buttonPadding * 2 + buttonHeight * 1.5 + 
+				.attr('y', buttonPadding * 2 + buttonHeight * 1.5 +
 					buttonLabelYAdjust)
 				.attr('text-anchor','middle')
 				.attr('fill', 'white')
@@ -489,11 +491,11 @@
 					.attr('fill', 'white')
 					.style('pointer-events','none');
 			}
-		}		
-		
+		}
+
 		// Load the death data and add it to the map and the graph.
 		function loadDeaths() {
-		
+
 			// Load the coordinates and demographics for each death. These are
 			// assumed to be provided in the order in which the victim died, for
 			// purposes of correlating to deathdays.csv.
@@ -508,30 +510,30 @@
 						}
 					);
 				}
-				
+
 				// Load the number of deaths for each date, and update
 				// each death record with the day and date on which it occurred.
 				d3.csv("deathdays.csv", function(data) {
 					let deathId = 0;
 					for (let day = 0; day < data.length; day++) {
-					
+
 						let totalCount = +data[day].deaths;
 						let maleCount = 0;
 						let femaleCount = 0;
 						let ageCount = [0,0,0,0,0,0];
-						
+
 						// Find the highest number of deaths on any day,
 						// to set the vertical scale.
 						if (maxDeaths < totalCount) {
 							maxDeaths = totalCount;
 						}
-						
+
 						for (let i=0; i < totalCount; i++) {
 							// Update the individual death records with the day
 							// and date of death.
 							deaths[deathId].deathday = day;
 							deaths[deathId].deathdate = data[day].date;
-							
+
 							// Count the deaths on each deathDay by demographic.
 							if (deaths[deathId].gender == "male") {
 								maleCount++;
@@ -539,11 +541,11 @@
 								femaleCount++;
 							}
 							ageCount[deaths[deathId].age]++;
-							
+
 							// Increment to the next individual death record.
 							deathId++;
 						}
-						
+
 						deathDays.push ({
 							day: day,
 							deathdate: data[day].date,
@@ -552,35 +554,35 @@
 							female: femaleCount,
 							age: ageCount
 						});
-						
+
 					}
 
 					graphXScale.domain([0, deathDays.length-1])
 						.range([padding, graphWidth - padding]);
 					graphYScale.domain([0, maxDeaths])
 						.range([graphHeight - padding, padding]);
-						
+
 					drawDeathsMap();
 					drawDeathsGraphLines();
 					drawDeathsGraph();
-					
+
 					displayTotal();
 				});
-				
+
 			});
 		}
 
 		// Load and draw the water pumps.
 		function drawPumps() {
 			const pumpSize = 8;
-		
+
 			d3.csv("pumps.csv", function(data) {
 				for (let i=0; i < data.length; i++) {
 					pumps.push(
 						{x: data[i].x, y: data[i].y}
 					);
 				}
-				
+
 				map.selectAll('.pump')
 					.data(pumps)
 					.enter()
@@ -591,13 +593,13 @@
 					.attr('x', function(d) { return mapXScale(d.x) - pumpSize / 2; })
 					.attr('y', function(d) { return mapYScale(d.y) - pumpSize / 2; })
 					.attr('transform', function(d) {
-						return 'rotate(45 ' + 
+						return 'rotate(45 ' +
 							mapXScale(d.x) + ' ' +
 							mapYScale(d.y) + ')';
 					});
 			});
 		}
-		
+
 		// Load and draw the street and building labels.
 		function drawMapLabels() {
 			d3.csv("maplabels.csv", function(data) {
@@ -610,7 +612,7 @@
 						angle: data[i].angle
 					});
 				}
-				
+
 				map.selectAll('.mapLabel')
 					.data(mapLabels)
 					.enter()
@@ -624,7 +626,7 @@
 						return 'rotate(' + d.angle + ',' +
 							d.x + ',' + d.y + ')';
 					});
-					
+
 				/*
 				// We used this code to estimate coordinates
 				// for all the labels.
@@ -634,31 +636,31 @@
 				*/
 			});
 		}
-		
+
 		// Provide a means of drawing the map lines at scale.
 		let lineFunction = d3.svg.line()
 			.x(function(d) { return mapXScale(d.x); })
 			.y(function(d) { return mapYScale(d.y); })
 			.interpolate("linear");
-		
+
 		// Start the process by loading and drawing the map.
 		d3.json("streets.json", function(data) {
 			streets = data;
-		
+
 			mapXScale.domain([3,20]).range([0, mapWidth]);
 			mapYScale.domain([3,20]).range([mapHeight, 0]);
-			
+
 			for (let i=0; i < streets.length; i++) {
 				map.append("path")
 					.attr("d", lineFunction(streets[i]))
 					.attr("class", "street");
 			}
-			
+
 			drawMapLabels();
 			drawPumps();
 			loadDeaths();
 		});
-				
+
 	</script>
 </body>
 
