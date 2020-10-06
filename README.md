@@ -1,3 +1,3 @@
-
-
+The rough draft of my thought pattern on how to create a map using D3 to illuistrate the John Snow’s heroic efforts and landmark achievement in isolating the caue of the cholera outbreak in London in 1854.
+The sketch above presumably  just gives an overbiew od the subsequent steps that I would be undertaking to explore and analyze the the map through viziualization using D3.  I drew  rough skecthes of the the London street, shaded the areas where the cholera outbreak is largely concentrated, showed a schematic on how I want to reperesnt death by gender and age group with different color codings. Also I showed the statistcial diagrammatic represengtations to reveal the varing degrees of casulaties in various locations around London at the time of the incident.
 
